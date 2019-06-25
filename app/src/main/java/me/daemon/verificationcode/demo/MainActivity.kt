@@ -1,4 +1,4 @@
-package me.daemon.verificationcode
+package me.daemon.verificationcode.demo
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

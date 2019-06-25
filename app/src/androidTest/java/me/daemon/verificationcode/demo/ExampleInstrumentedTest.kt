@@ -1,4 +1,4 @@
-package me.daemon.verificationcode
+package me.daemon.verificationcode.demo
 
 import androidx.test.InstrumentationRegistry
 import androidx.test.runner.AndroidJUnit4
