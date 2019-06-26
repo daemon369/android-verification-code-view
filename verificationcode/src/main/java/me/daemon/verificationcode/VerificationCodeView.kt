@@ -26,7 +26,12 @@ class VerificationCodeView @JvmOverloads constructor(
     private val sb = StringBuilder()
     private val paint = Paint()
 
-    var size = 4
+    var capacity = 4
+        set(value) {
+            if (field == value) return
+            field = value
+            postInvalidate()
+        }
 
     init {
         isFocusable = true
@@ -41,9 +46,6 @@ class VerificationCodeView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-    }
-
-    override fun onLayout(changed: Boolean, l: Int, t: Int, r: Int, b: Int) {
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -96,7 +98,7 @@ class VerificationCodeView @JvmOverloads constructor(
                 }
             }
             in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
-                if (sb.length < size) {
+                if (sb.length < capacity) {
                     sb.append(keyCode - KeyEvent.KEYCODE_0)
                     invalidate()
                 }
