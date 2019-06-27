@@ -85,7 +85,9 @@ class VerificationCodeView @JvmOverloads constructor(
         val fic = BaseInputConnection(this, false)
         outAttrs.actionLabel = null
         outAttrs.inputType = InputType.TYPE_CLASS_NUMBER
-        outAttrs.imeOptions = EditorInfo.IME_ACTION_NONE
+        outAttrs.imeOptions = EditorInfo.IME_ACTION_NONE or
+                EditorInfo.IME_FLAG_NO_FULLSCREEN or
+                EditorInfo.IME_FLAG_NO_EXTRACT_UI
         return fic
     }
 
@@ -104,7 +106,8 @@ class VerificationCodeView @JvmOverloads constructor(
                 }
             }
             KeyEvent.KEYCODE_ENTER -> {
-                val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                val imm =
+                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 imm.hideSoftInputFromWindow(windowToken, 0)
             }
             else -> {
