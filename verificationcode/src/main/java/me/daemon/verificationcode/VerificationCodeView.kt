@@ -69,6 +69,8 @@ class VerificationCodeView @JvmOverloads constructor(
     private var gridWidth = 0
     private var gridHeight = 0
 
+    var listener: Listener? = null
+
     init {
         isFocusable = true
         isFocusableInTouchMode = true
@@ -136,7 +138,6 @@ class VerificationCodeView @JvmOverloads constructor(
         requestFocus()
         requestFocusFromTouch()
 
-        // 触摸控件时显示 键盘
         if (event.actionMasked == MotionEvent.ACTION_DOWN) {
             val imm = context
                 .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -152,7 +153,6 @@ class VerificationCodeView @JvmOverloads constructor(
     override fun onCreateInputConnection(outAttrs: EditorInfo?): InputConnection {
         outAttrs ?: return super.onCreateInputConnection(outAttrs)
 
-        // 声明一个数字数字键盘
         val fic = BaseInputConnection(this, false)
         outAttrs.actionLabel = null
         outAttrs.inputType = InputType.TYPE_CLASS_NUMBER
@@ -167,12 +167,14 @@ class VerificationCodeView @JvmOverloads constructor(
             KeyEvent.KEYCODE_DEL -> {
                 if (sb.isNotEmpty()) {
                     sb.deleteCharAt(sb.length - 1)
+                    listener?.onChanged(this, sb.toString(), false)
                     invalidate()
                 }
             }
             in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
                 if (sb.length < capacity) {
                     sb.append(keyCode - KeyEvent.KEYCODE_0)
+                    listener?.onChanged(this, sb.toString(), sb.length == capacity)
                     invalidate()
                 }
             }
@@ -204,6 +206,12 @@ class VerificationCodeView @JvmOverloads constructor(
         } else {
             super.onRestoreInstanceState(state)
         }
+    }
+
+    interface Listener {
+
+        fun onChanged(view: VerificationCodeView, content: String, isFullFilled: Boolean)
+
     }
 
 }
