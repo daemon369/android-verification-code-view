@@ -53,6 +53,7 @@ class VerificationCodeView @JvmOverloads constructor(
         set(value) {
             if (field == value) return
             field = value
+            textPaint.textSize = field
             postInvalidate()
         }
 
@@ -60,7 +61,7 @@ class VerificationCodeView @JvmOverloads constructor(
         set(value) {
             if (field == value) return
             field = value
-            textPaint.color = textColor
+            textPaint.color = field
             postInvalidate()
         }
 
@@ -75,6 +76,7 @@ class VerificationCodeView @JvmOverloads constructor(
             isAntiAlias = true
             color = textColor
             textSize = this@VerificationCodeView.textSize
+            textAlign = Paint.Align.CENTER
         }
     }
 
@@ -92,24 +94,38 @@ class VerificationCodeView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas?) {
         canvas ?: return super.onDraw(canvas)
 
+        val top = paddingTop
+        val bottom = measuredHeight - paddingBottom
+        var start = paddingLeft
+
         // draw grids
         val gridCount = capacity
         gridBackground?.let {
-            var left = paddingLeft
-            val top = paddingTop
-            val bottom = top + gridHeight
             for (i in 0 until gridCount) {
-                it.setBounds(left, top, left + gridWidth, bottom)
+                it.setBounds(start, top, start + gridWidth, bottom)
                 it.draw(canvas)
-                left += gridWidth + gridDividerSize + 1
+                start += gridWidth + gridDividerSize + 1
             }
         }
 
-        val len = sb.length
         val str = sb.toString()
+        val len = str.length
 
+        val fm = textPaint.fontMetrics
+        val baseLine = top + (measuredHeight - fm.bottom - fm.top) / 2
+
+        start = paddingLeft + gridWidth / 2
         for (i in 0 until len) {
-            canvas.drawText(str, i, i + 1, i * 50.toFloat(), 100f, textPaint)
+            canvas.drawText(
+                str,
+                i,
+                i + 1,
+                start.toFloat(),
+                baseLine,
+                textPaint
+            )
+
+            start += gridWidth + gridDividerSize + 1
         }
     }
 

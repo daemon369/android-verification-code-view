@@ -2,9 +2,10 @@ package me.daemon.verificationcode.demo
 
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
+import me.daemon.view.common.dp2px
 
 class MainActivity : AppCompatActivity() {
 
@@ -14,5 +15,7 @@ class MainActivity : AppCompatActivity() {
 
         vc.gridDividerSize = 10
         vc.gridBackground = ColorDrawable(Color.YELLOW)
+        vc.textSize = dp2px(30f)
+        vc.textColor = Color.CYAN
     }
 }

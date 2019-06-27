@@ -44,5 +44,5 @@ dependencies {
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    implementation 'me.daemon:androidviewcommon:0.0.4'
+    api 'me.daemon:androidviewcommon:0.0.4'
 }
