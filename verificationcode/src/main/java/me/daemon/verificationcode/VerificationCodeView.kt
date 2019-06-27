@@ -5,6 +5,7 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
+import android.os.Parcelable
 import android.text.InputType
 import android.util.AttributeSet
 import android.view.KeyEvent
@@ -184,6 +185,25 @@ class VerificationCodeView @JvmOverloads constructor(
             }
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    override fun onSaveInstanceState(): Parcelable? {
+        val savedState = SavedState(super.onSaveInstanceState())
+
+        savedState.str = sb.toString()
+
+        return savedState
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        if (state is SavedState) {
+            super.onRestoreInstanceState(state.superState)
+
+            sb.clear()
+            sb.append(state.str)
+        } else {
+            super.onRestoreInstanceState(state)
+        }
     }
 
 }

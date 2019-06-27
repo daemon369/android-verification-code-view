@@ -13,6 +13,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        vc.capacity = 6
         vc.gridDividerSize = 10
         vc.gridBackground = ColorDrawable(Color.YELLOW)
         vc.textSize = dp2px(30f)
