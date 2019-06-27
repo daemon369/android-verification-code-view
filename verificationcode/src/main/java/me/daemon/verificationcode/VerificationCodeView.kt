@@ -25,6 +25,8 @@ class VerificationCodeView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val sb = StringBuilder()
+    private val gridPaint = Paint()
+    private val inputPaint = Paint()
     private val paint = Paint()
 
     var capacity = 4
@@ -41,6 +43,11 @@ class VerificationCodeView @JvmOverloads constructor(
             postInvalidate()
         }
 
+    var gridDividerSize = 0
+
+    private var gridWidth = 0
+    private var gridHeight = 0
+
     init {
         isFocusable = true
         isFocusableInTouchMode = true
@@ -54,10 +61,30 @@ class VerificationCodeView @JvmOverloads constructor(
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec)
+
+        val gridCount = capacity
+        gridWidth = when (gridCount) {
+            0 -> 0
+            else -> (measuredWidth - gridDividerSize * (gridCount - 1)) / gridCount
+        }
+        gridHeight = measuredHeight - paddingTop - paddingBottom
     }
 
     override fun onDraw(canvas: Canvas?) {
         canvas ?: return super.onDraw(canvas)
+
+        // draw grids
+        val gridCount = capacity
+        gridBackground?.let {
+            var left = paddingLeft
+            val top = paddingTop
+            val bottom = top + gridHeight
+            for (i in 0 until gridCount) {
+                it.setBounds(left, top, left + gridWidth, bottom)
+                it.draw(canvas)
+                left += gridWidth + gridDividerSize
+            }
+        }
 
         val len = sb.length
         val str = sb.toString()
