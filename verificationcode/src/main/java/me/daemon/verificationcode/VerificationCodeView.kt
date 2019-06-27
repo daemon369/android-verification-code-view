@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import android.text.InputType
 import android.util.AttributeSet
 import android.view.KeyEvent
@@ -27,6 +28,13 @@ class VerificationCodeView @JvmOverloads constructor(
     private val paint = Paint()
 
     var capacity = 4
+        set(value) {
+            if (field == value) return
+            field = value
+            postInvalidate()
+        }
+
+    var gridBackground: Drawable? = null
         set(value) {
             if (field == value) return
             field = value
@@ -75,6 +83,10 @@ class VerificationCodeView @JvmOverloads constructor(
                 .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.showSoftInput(this, InputMethodManager.SHOW_FORCED)
         }
+        return true
+    }
+
+    override fun onCheckIsTextEditor(): Boolean {
         return true
     }
 
