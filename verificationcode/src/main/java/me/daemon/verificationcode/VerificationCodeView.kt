@@ -14,6 +14,7 @@ import android.view.inputmethod.BaseInputConnection
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
+import me.daemon.view.common.sp2px
 
 
 /**
@@ -25,9 +26,7 @@ class VerificationCodeView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private val sb = StringBuilder()
-    private val gridPaint = Paint()
-    private val inputPaint = Paint()
-    private val paint = Paint()
+    private val textPaint = Paint()
 
     var capacity = 4
         set(value) {
@@ -44,6 +43,26 @@ class VerificationCodeView @JvmOverloads constructor(
         }
 
     var gridDividerSize = 0
+        set(value) {
+            if (field == value) return
+            field = value
+            postInvalidate()
+        }
+
+    var textSize = context.sp2px(14f)
+        set(value) {
+            if (field == value) return
+            field = value
+            postInvalidate()
+        }
+
+    var textColor = Color.BLACK
+        set(value) {
+            if (field == value) return
+            field = value
+            textPaint.color = textColor
+            postInvalidate()
+        }
 
     private var gridWidth = 0
     private var gridHeight = 0
@@ -52,10 +71,10 @@ class VerificationCodeView @JvmOverloads constructor(
         isFocusable = true
         isFocusableInTouchMode = true
 
-        paint.apply {
-            color = Color.BLACK
-            textSize = 50f
-            strokeWidth = 3f
+        textPaint.apply {
+            isAntiAlias = true
+            color = textColor
+            textSize = this@VerificationCodeView.textSize
         }
     }
 
@@ -82,20 +101,16 @@ class VerificationCodeView @JvmOverloads constructor(
             for (i in 0 until gridCount) {
                 it.setBounds(left, top, left + gridWidth, bottom)
                 it.draw(canvas)
-                left += gridWidth + gridDividerSize
+                left += gridWidth + gridDividerSize + 1
             }
         }
 
         val len = sb.length
         val str = sb.toString()
 
-        paint.color = Color.BLACK
         for (i in 0 until len) {
-            canvas.drawText(str, i, i + 1, i * 50.toFloat(), 100f, paint)
+            canvas.drawText(str, i, i + 1, i * 50.toFloat(), 100f, textPaint)
         }
-
-        paint.color = Color.BLUE
-        canvas.drawLine(0f, 100f, 1000f, 100f, paint)
     }
 
     override fun onTouchEvent(event: MotionEvent?): Boolean {
