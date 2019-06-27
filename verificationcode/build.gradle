@@ -58,7 +58,7 @@ ext {
     libraryName = 'VerificationCodeView'
     artifact = 'verificationcodeview'
 
-    libraryDescription = 'Verification input view for android'
+    libraryDescription = 'Verification code input view for android'
 
     siteUrl = 'https://github.com/daemon369/VerificationCodeView'
     gitUrl = 'https://github.com/daemon369/VerificationCodeView.git'
