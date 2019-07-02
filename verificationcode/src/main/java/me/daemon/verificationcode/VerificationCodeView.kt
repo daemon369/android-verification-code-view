@@ -72,6 +72,12 @@ class VerificationCodeView @JvmOverloads constructor(
     var listener: Listener? = null
 
     init {
+        val t = context.obtainStyledAttributes(attrs, R.styleable.DaemonVcVerificationCodeView)
+
+        capacity = t.getInteger(R.styleable.DaemonVcVerificationCodeView_daemon_vc_capacity, 4)
+
+        t.recycle()
+
         isFocusable = true
         isFocusableInTouchMode = true
 

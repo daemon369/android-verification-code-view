@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="DaemonVcVerificationCodeView">
+
+        <attr name="daemon_vc_capacity" format="integer" />
+
+    </declare-styleable>
+
+</resources>
