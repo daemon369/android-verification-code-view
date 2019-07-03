@@ -1,5 +1,6 @@
 package me.daemon.verificationcode
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -72,6 +73,7 @@ class VerificationCodeView @JvmOverloads constructor(
     var listener: Listener? = null
 
     init {
+        @SuppressLint("CustomViewStyleable")
         val t = context.obtainStyledAttributes(attrs, R.styleable.DaemonVcVerificationCodeView)
 
         capacity = t.getInteger(R.styleable.DaemonVcVerificationCodeView_daemon_vc_capacity, 4)
