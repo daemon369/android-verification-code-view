@@ -81,11 +81,8 @@ class VerificationCodeView @JvmOverloads constructor(
         val t = context.obtainStyledAttributes(attrs, R.styleable.DaemonVcVerificationCodeView)
 
         capacity = t.getInteger(R.styleable.DaemonVcVerificationCodeView_daemon_vc_capacity, 4)
-        val gridBg =
-            t.getInteger(R.styleable.DaemonVcVerificationCodeView_daemon_vc_gridBackground, 0)
-        if (gridBg > 0) {
-            gridBackground = resources.getDrawable(gridBg)
-        }
+        gridBackground =
+            t.getDrawable(R.styleable.DaemonVcVerificationCodeView_daemon_vc_gridBackground)
         gridDividerSize =
             t.getDimension(R.styleable.DaemonVcVerificationCodeView_daemon_vc_gridDividerSize, 0f)
                 .toInt()

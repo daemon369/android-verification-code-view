@@ -25,8 +25,9 @@
         android:layout_marginTop="20dp"
         android:background="#ff0000"
         app:daemon_vc_capacity="8"
-        app:daemon_vc_gridDividerSize="30dp"
-        app:daemon_vc_textColor="#ff00ff"
+        app:daemon_vc_gridBackground="@drawable/ic_launcher_background"
+        app:daemon_vc_gridDividerSize="15dp"
+        app:daemon_vc_textColor="@android:color/holo_green_light"
         app:daemon_vc_textSize="30sp" />
 
 </RelativeLayout>

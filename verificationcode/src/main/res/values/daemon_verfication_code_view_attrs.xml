@@ -4,7 +4,7 @@
     <declare-styleable name="DaemonVcVerificationCodeView">
 
         <attr name="daemon_vc_capacity" format="integer" />
-        <attr name="daemon_vc_gridBackground" format="reference" />
+        <attr name="daemon_vc_gridBackground" format="reference|color" />
         <attr name="daemon_vc_gridDividerSize" format="dimension" />
         <attr name="daemon_vc_textSize" format="dimension" />
         <attr name="daemon_vc_textColor" format="color" />
