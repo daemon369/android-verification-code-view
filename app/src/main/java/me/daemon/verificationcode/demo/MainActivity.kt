@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
         vc.capacity = 6
         vc.gridDividerSize = 10
         vc.gridBackground = ColorDrawable(Color.YELLOW)
-        vc.textSize = dp2px(30f)
+//        vc.textSize = dp2px(30f)
         vc.textColor = Color.CYAN
         vc.listener = object : VerificationCodeView.Listener {
             override fun onChanged(
