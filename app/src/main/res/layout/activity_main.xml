@@ -13,6 +13,7 @@
         android:layout_height="100dp"
         android:layout_centerInParent="true"
         android:background="#ff0000"
+        app:daemon_vc_capacity="8"
         app:daemon_vc_textSize="40sp" />
 
 </RelativeLayout>

@@ -73,15 +73,16 @@ class VerificationCodeView @JvmOverloads constructor(
 
     var listener: Listener? = null
 
-    internal var DRAW_AUXILIARY_LINE = false
-    internal var AUXILIARY_LINE_COLOR = Color.BLUE
+    var DRAW_AUXILIARY_LINE = false
+    var AUXILIARY_LINE_COLOR = Color.BLUE
 
     init {
         @SuppressLint("CustomViewStyleable")
         val t = context.obtainStyledAttributes(attrs, R.styleable.DaemonVcVerificationCodeView)
 
         capacity = t.getInteger(R.styleable.DaemonVcVerificationCodeView_daemon_vc_capacity, 4)
-        val gridBg = t.getInteger(R.styleable.DaemonVcVerificationCodeView_daemon_vc_capacity, 0)
+        val gridBg =
+            t.getInteger(R.styleable.DaemonVcVerificationCodeView_daemon_vc_gridBackground, 0)
         if (gridBg > 0) {
             gridBackground = resources.getDrawable(gridBg)
         }

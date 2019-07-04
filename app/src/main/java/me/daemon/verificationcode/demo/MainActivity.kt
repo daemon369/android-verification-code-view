@@ -7,7 +7,6 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import me.daemon.verificationcode.VerificationCodeView
-import me.daemon.view.common.dp2px
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,11 +14,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        vc.capacity = 6
+        vc.DRAW_AUXILIARY_LINE = true
         vc.gridDividerSize = 10
         vc.gridBackground = ColorDrawable(Color.YELLOW)
-//        vc.textSize = dp2px(30f)
-        vc.textColor = Color.CYAN
         vc.listener = object : VerificationCodeView.Listener {
             override fun onChanged(
                 view: VerificationCodeView,
