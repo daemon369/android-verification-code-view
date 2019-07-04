@@ -11,9 +11,22 @@
         android:id="@+id/vc"
         android:layout_width="300dp"
         android:layout_height="100dp"
-        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:background="#ff0000" />
+
+    <me.daemon.verificationcode.VerificationCodeView
+        android:id="@+id/vc2"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_below="@id/vc"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
         android:background="#ff0000"
         app:daemon_vc_capacity="8"
-        app:daemon_vc_textSize="40sp" />
+        app:daemon_vc_gridDividerSize="30dp"
+        app:daemon_vc_textColor="#ff00ff"
+        app:daemon_vc_textSize="30sp" />
 
 </RelativeLayout>
