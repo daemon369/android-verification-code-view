@@ -29,6 +29,7 @@ class VerificationCodeView @JvmOverloads constructor(
 
     private val sb = StringBuilder()
     private val textPaint = Paint()
+    private val auxiliaryPaint = Paint()
 
     var capacity = 4
         set(value) {
@@ -72,6 +73,9 @@ class VerificationCodeView @JvmOverloads constructor(
 
     var listener: Listener? = null
 
+    internal var DRAW_AUXILIARY_LINE = false
+    internal var AUXILIARY_LINE_COLOR = Color.BLUE
+
     init {
         @SuppressLint("CustomViewStyleable")
         val t = context.obtainStyledAttributes(attrs, R.styleable.DaemonVcVerificationCodeView)
@@ -101,6 +105,10 @@ class VerificationCodeView @JvmOverloads constructor(
             color = textColor
             textSize = this@VerificationCodeView.textSize
             textAlign = Paint.Align.CENTER
+        }
+
+        auxiliaryPaint.apply {
+            isAntiAlias = true
         }
     }
 
@@ -137,6 +145,19 @@ class VerificationCodeView @JvmOverloads constructor(
 
         val fm = textPaint.fontMetrics
         val baseLine = top + (measuredHeight - fm.bottom - fm.top) / 2
+
+        if (DRAW_AUXILIARY_LINE) {
+            val t = baseLine + fm.top
+            val a = baseLine + fm.ascent
+            val d = baseLine + fm.descent
+            val b = baseLine + fm.bottom
+            auxiliaryPaint.color = AUXILIARY_LINE_COLOR
+            canvas.drawLine(0f, t, measuredWidth.toFloat(), t, auxiliaryPaint)
+            canvas.drawLine(0f, a, measuredWidth.toFloat(), a, auxiliaryPaint)
+            canvas.drawLine(0f, baseLine, measuredWidth.toFloat(), baseLine, auxiliaryPaint)
+            canvas.drawLine(0f, d, measuredWidth.toFloat(), d, auxiliaryPaint)
+            canvas.drawLine(0f, b, measuredWidth.toFloat(), b, auxiliaryPaint)
+        }
 
         start = paddingLeft + gridWidth / 2
         for (i in 0 until len) {
