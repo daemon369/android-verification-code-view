@@ -22,6 +22,7 @@ import me.daemon.view.common.sp2px
 /**
  * @author daemon
  * @since 2019-06-25 16:50
+ * @see
  */
 class VerificationCodeView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
