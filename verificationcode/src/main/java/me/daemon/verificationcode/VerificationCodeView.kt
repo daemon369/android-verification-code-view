@@ -22,7 +22,8 @@ import me.daemon.view.common.sp2px
 /**
  * @author daemon
  * @since 2019-06-25 16:50
- * @see
+ * @see [GitHub](https://github.com/daemon369/VerificationCodeView)
+ * @see [jcenter](https://bintray.com/beta/#/daemon336699/maven/verificationcodeview)
  */
 class VerificationCodeView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
