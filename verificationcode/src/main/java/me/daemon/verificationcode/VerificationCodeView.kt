@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.Drawable
 import android.os.Parcelable
+import android.os.SystemClock
 import android.text.InputType
 import android.util.AttributeSet
 import android.view.KeyEvent
@@ -17,6 +18,8 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
 import me.daemon.view.common.sp2px
+import kotlin.math.max
+import kotlin.math.min
 
 
 /**
@@ -29,9 +32,19 @@ class VerificationCodeView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
+    companion object {
+        const val BLINK = 500
+
+        @Suppress("NOTHING_TO_INLINE")
+        private inline fun between(min: Int, max: Int, value: Int): Int = max(min, min(max, value))
+    }
+
     private val sb = StringBuilder()
     private val textPaint = Paint()
+    private val cursorPaint = Paint()
     private val auxiliaryPaint = Paint()
+
+    private val blink by lazy { Blink() }
 
     var capacity = 4
         set(value) {
@@ -70,6 +83,58 @@ class VerificationCodeView @JvmOverloads constructor(
             postInvalidate()
         }
 
+    var cursorEnabled = false
+        set(value) {
+            if (field == value) return
+            field = value
+            postInvalidate()
+        }
+
+    var cursorWidth = 0
+        set(value) {
+            if (field == value) return
+            field = value
+            postInvalidate()
+        }
+
+    var cursorHeight = 0
+        set(value) {
+            if (field == value) return
+            field = value
+            postInvalidate()
+        }
+
+    var cursorColor = Color.BLACK
+        set(value) {
+            if (field == value) return
+            field = value
+            postInvalidate()
+        }
+
+    var cursorBlink = true
+        set(value) {
+            if (field == value) return
+            field = value
+
+            if (shouldBlink()) {
+                blink.makeBlink()
+            }
+        }
+
+    /**
+     * cursor blink interval in milliseconds
+     */
+    var cursorBlinkInterval = BLINK
+        set(value) {
+            if (field == value) return
+            field = value
+
+            removeCallbacks(blink)
+            postDelayed(blink, field.toLong())
+
+            postInvalidate()
+        }
+
     private var gridWidth = 0
     private var gridHeight = 0
 
@@ -95,6 +160,24 @@ class VerificationCodeView @JvmOverloads constructor(
         textColor =
             t.getColor(R.styleable.DaemonVcVerificationCodeView_daemon_vc_textColor, Color.BLACK)
 
+        // cursor
+        cursorEnabled =
+            t.getBoolean(R.styleable.DaemonVcVerificationCodeView_daemon_vc_cursorEnabled, false)
+        cursorWidth =
+            t.getDimension(R.styleable.DaemonVcVerificationCodeView_daemon_vc_cursorWidth, 0f)
+                .toInt()
+        cursorHeight =
+            t.getDimension(R.styleable.DaemonVcVerificationCodeView_daemon_vc_cursorHeight, 0f)
+                .toInt()
+        cursorColor =
+            t.getColor(R.styleable.DaemonVcVerificationCodeView_daemon_vc_cursorColor, Color.BLACK)
+        cursorBlink =
+            t.getBoolean(R.styleable.DaemonVcVerificationCodeView_daemon_vc_cursorBlink, true)
+        cursorBlinkInterval = t.getInteger(
+            R.styleable.DaemonVcVerificationCodeView_daemon_vc_cursorBlinkInterval,
+            BLINK
+        )
+
         t.recycle()
 
         isFocusable = true
@@ -105,6 +188,11 @@ class VerificationCodeView @JvmOverloads constructor(
             color = textColor
             textSize = this@VerificationCodeView.textSize
             textAlign = Paint.Align.CENTER
+        }
+
+        cursorPaint.apply {
+            isAntiAlias = true
+            color = cursorColor
         }
 
         auxiliaryPaint.apply {
@@ -171,6 +259,28 @@ class VerificationCodeView @JvmOverloads constructor(
             )
 
             start += gridWidth + gridDividerSize + 1
+        }
+
+        if (cursorEnabled && cursorWidth > 0 && cursorHeight > 0 && len < capacity) {
+            if (!cursorBlink || blink.show()) {
+
+                var cursorL =
+                    paddingLeft + len * (gridWidth + gridDividerSize) + gridWidth / 2 - cursorWidth / 2
+                cursorL = between(0, measuredWidth, cursorL)
+
+                var cursorT = paddingTop + gridHeight / 2 - cursorHeight / 2
+                cursorT = between(0, measuredHeight, cursorT)
+
+                val cursorR = between(cursorL, measuredWidth, cursorL + cursorWidth)
+                val cursorB = between(cursorT, measuredHeight, cursorT + cursorHeight)
+                canvas.drawRect(
+                    cursorL.toFloat(),
+                    cursorT.toFloat(),
+                    cursorR.toFloat(),
+                    cursorB.toFloat(),
+                    cursorPaint
+                )
+            }
         }
     }
 
@@ -254,6 +364,47 @@ class VerificationCodeView @JvmOverloads constructor(
 
         fun onChanged(view: VerificationCodeView, content: String, isFullFilled: Boolean)
 
+    }
+
+    private fun shouldBlink(): Boolean {
+        return cursorEnabled && cursorBlink
+    }
+
+    private inner class Blink : Runnable {
+        private var showCursorStart = 0L
+        private var cancelled = false
+
+        fun show() =
+            (SystemClock.uptimeMillis() - showCursorStart) % (cursorBlinkInterval * 2) < cursorBlinkInterval
+
+        fun makeBlink() {
+            showCursorStart = SystemClock.uptimeMillis()
+            this@VerificationCodeView.removeCallbacks(this)
+            this@VerificationCodeView.postDelayed(this, cursorBlinkInterval.toLong())
+        }
+
+        override fun run() {
+            if (cancelled) {
+                return
+            }
+
+            this@VerificationCodeView.removeCallbacks(this)
+            if (shouldBlink()) {
+                this@VerificationCodeView.invalidate() // TODO optimize
+                this@VerificationCodeView.postDelayed(this, BLINK.toLong())
+            }
+        }
+
+        fun cancel() {
+            if (!cancelled) {
+                this@VerificationCodeView.removeCallbacks(this)
+                cancelled = true
+            }
+        }
+
+        fun unCancel() {
+            cancelled = false
+        }
     }
 
 }

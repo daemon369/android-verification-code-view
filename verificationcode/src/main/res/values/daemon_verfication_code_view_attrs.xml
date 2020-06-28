@@ -8,6 +8,13 @@
         <attr name="daemon_vc_gridDividerSize" format="dimension" />
         <attr name="daemon_vc_textSize" format="dimension" />
         <attr name="daemon_vc_textColor" format="color" />
+        <!-- cursor -->
+        <attr name="daemon_vc_cursorEnabled" format="boolean" />
+        <attr name="daemon_vc_cursorWidth" format="dimension" />
+        <attr name="daemon_vc_cursorHeight" format="dimension" />
+        <attr name="daemon_vc_cursorColor" format="color" />
+        <attr name="daemon_vc_cursorBlink" format="boolean" />
+        <attr name="daemon_vc_cursorBlinkInterval" format="integer" />
 
     </declare-styleable>
 
