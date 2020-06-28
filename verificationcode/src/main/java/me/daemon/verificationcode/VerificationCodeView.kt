@@ -284,6 +284,33 @@ class VerificationCodeView @JvmOverloads constructor(
         }
     }
 
+    override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
+        super.onWindowFocusChanged(hasWindowFocus)
+        if (hasWindowFocus) {
+            blink.unCancel()
+        } else {
+            blink.cancel()
+        }
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        blink.unCancel()
+    }
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        blink.cancel()
+    }
+
+    override fun onScreenStateChanged(screenState: Int) {
+        super.onScreenStateChanged(screenState)
+        when (screenState) {
+            SCREEN_STATE_ON -> blink.unCancel()
+            SCREEN_STATE_OFF -> blink.cancel()
+        }
+    }
+
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         event ?: return super.onTouchEvent(event)
 
@@ -404,6 +431,7 @@ class VerificationCodeView @JvmOverloads constructor(
 
         fun unCancel() {
             cancelled = false
+            makeBlink()
         }
     }
 
