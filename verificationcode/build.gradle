@@ -24,10 +24,6 @@ android {
         }
     }
 
-    sourceSets {
-        main.java.srcDirs += 'src/main/kotlin'
-    }
-
     compileOptions {
         kotlinOptions.freeCompilerArgs += ['-module-name', "me.daemon.verficationcode"]
     }

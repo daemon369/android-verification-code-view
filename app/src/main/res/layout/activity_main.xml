@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00ff00"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
     tools:context=".MainActivity">
+
+    <me.daemon.verificationcode.VerificationCodeView
+        android:id="@+id/vc3"
+        android:layout_width="300dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:background="#ff0000"
+        app:daemon_vc_capacity="4"
+        app:daemon_vc_gridBackground="@drawable/shape_circle"
+        app:daemon_vc_gridDividerSize="15dp"
+        app:daemon_vc_textColor="@android:color/holo_green_light"
+        app:daemon_vc_textSize="30sp" />
 
     <me.daemon.verificationcode.VerificationCodeView
         android:id="@+id/vc"
         android:layout_width="300dp"
         android:layout_height="100dp"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:background="#ff0000" />
 
@@ -20,8 +32,6 @@
         android:id="@+id/vc2"
         android:layout_width="300dp"
         android:layout_height="100dp"
-        android:layout_below="@id/vc"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:background="#ff0000"
         app:daemon_vc_capacity="8"
@@ -30,4 +40,4 @@
         app:daemon_vc_textColor="@android:color/holo_green_light"
         app:daemon_vc_textSize="30sp" />
 
-</RelativeLayout>
+</LinearLayout>
