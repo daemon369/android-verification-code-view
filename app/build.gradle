@@ -33,5 +33,7 @@ dependencies {
     androidTestImplementation deps.x.espresso
     implementation deps.x.constraintlayout
 
-    implementation project(':verificationcode')
+//    implementation project(':verificationcode')
+    implementation 'me.daemon:verificationcodeview:0.0.3'
+
 }
