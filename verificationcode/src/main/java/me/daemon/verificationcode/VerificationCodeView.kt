@@ -46,6 +46,9 @@ class VerificationCodeView @JvmOverloads constructor(
 
     private val blink by lazy { Blink() }
 
+    val verificationCode: String
+        get() = sb.toString()
+
     var capacity = 4
         set(value) {
             if (field == value) return
