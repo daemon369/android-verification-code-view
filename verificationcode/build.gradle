@@ -45,7 +45,7 @@ dependencies {
     androidTestImplementation deps.x.testrunner
     androidTestImplementation deps.x.espresso
 
-    api 'me.daemon:androidviewcommon:0.0.6'
+    api 'me.daemon:androidviewcommon:0.0.7'
 }
 
 ext {
