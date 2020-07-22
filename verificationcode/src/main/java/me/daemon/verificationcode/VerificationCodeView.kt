@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.os.Parcelable
 import android.os.SystemClock
@@ -141,6 +142,10 @@ class VerificationCodeView @JvmOverloads constructor(
 
     var DRAW_AUXILIARY_LINE = false
     var AUXILIARY_LINE_COLOR = Color.BLUE
+
+    private val imm by lazy {
+        context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    }
 
     init {
         @SuppressLint("CustomViewStyleable")
@@ -283,11 +288,22 @@ class VerificationCodeView @JvmOverloads constructor(
         }
     }
 
+    override fun onFocusChanged(gainFocus: Boolean, direction: Int, previouslyFocusedRect: Rect?) {
+        super.onFocusChanged(gainFocus, direction, previouslyFocusedRect)
+        focusChanged()
+    }
+
     override fun onWindowFocusChanged(hasWindowFocus: Boolean) {
         super.onWindowFocusChanged(hasWindowFocus)
-        if (hasWindowFocus) {
+        focusChanged()
+    }
+
+    private fun focusChanged() {
+        if (hasFocus() && hasWindowFocus()) {
+            imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
             blink.unCancel()
         } else {
+            imm.hideSoftInputFromWindow(windowToken, 0)
             blink.cancel()
         }
     }
@@ -317,9 +333,7 @@ class VerificationCodeView @JvmOverloads constructor(
         requestFocusFromTouch()
 
         if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-            val imm = context
-                .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.showSoftInput(this, InputMethodManager.SHOW_FORCED)
+            imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
         }
         return true
     }
@@ -422,6 +436,7 @@ class VerificationCodeView @JvmOverloads constructor(
         fun cancel() {
             if (!cancelled) {
                 this@VerificationCodeView.removeCallbacks(this)
+                this@VerificationCodeView.invalidate()
                 cancelled = true
             }
         }
