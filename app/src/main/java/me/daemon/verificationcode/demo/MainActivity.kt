@@ -46,5 +46,8 @@ class MainActivity : AppCompatActivity() {
                 )
             }
         }
+
+        vc3.postDelayed({ vc3.requestFocus() }, 3000)
+        root.setOnClickListener { vc3.clearFocus() }
     }
 }
