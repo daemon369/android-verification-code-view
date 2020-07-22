@@ -45,10 +45,16 @@ dependencies {
     androidTestImplementation deps.x.testrunner
     androidTestImplementation deps.x.espresso
 
-    api 'me.daemon:androidviewcommon:0.0.7'
+    api 'me.daemon:androidviewcommon:0.0.9'
 }
 
 ext {
+    pub = [
+            group   : 'me.daemon',
+            artifact: 'verificationcodeview',
+            version : '0.0.4'
+    ]
+
     bintrayRepo = 'maven'
     bintrayName = 'verificationcodeview'
 

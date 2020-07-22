@@ -17,9 +17,8 @@ import android.view.inputmethod.BaseInputConnection
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
 import android.view.inputmethod.InputMethodManager
+import me.daemon.view.common.between
 import me.daemon.view.common.sp2px
-import kotlin.math.max
-import kotlin.math.min
 
 
 /**
@@ -34,9 +33,6 @@ class VerificationCodeView @JvmOverloads constructor(
 
     companion object {
         const val BLINK = 500
-
-        @Suppress("NOTHING_TO_INLINE")
-        private inline fun between(min: Int, max: Int, value: Int): Int = max(min, min(max, value))
     }
 
     private val sb = StringBuilder()
@@ -396,9 +392,7 @@ class VerificationCodeView @JvmOverloads constructor(
 
     }
 
-    private fun shouldBlink(): Boolean {
-        return cursorEnabled && cursorBlink
-    }
+    private fun shouldBlink() = cursorEnabled && cursorBlink
 
     private inner class Blink : Runnable {
         private var showCursorStart = 0L

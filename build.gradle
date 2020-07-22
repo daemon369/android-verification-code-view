@@ -8,12 +8,6 @@ buildscript {
         target_sdk_version = 29
         kotlin_version = '1.3.72'
 
-        pub = [
-                group   : 'me.daemon',
-                artifact: 'verificationcodeview',
-                version : '0.0.4'
-        ]
-
         deps = [
                 kotlin: "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version",
                 x     : [
@@ -33,7 +27,7 @@ buildscript {
 
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.0.0'
+        classpath 'com.android.tools.build:gradle:4.0.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
