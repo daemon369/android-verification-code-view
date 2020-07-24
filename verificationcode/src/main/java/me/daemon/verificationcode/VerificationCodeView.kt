@@ -135,6 +135,9 @@ class VerificationCodeView @JvmOverloads constructor(
             postInvalidate()
         }
 
+    val isFullFilled
+        get() = sb.length == capacity
+
     private var gridWidth = 0
     private var gridHeight = 0
 
@@ -300,10 +303,10 @@ class VerificationCodeView @JvmOverloads constructor(
 
     private fun focusChanged() {
         if (hasFocus() && hasWindowFocus()) {
-            imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+            showSoftKeyboard()
             blink.unCancel()
         } else {
-            imm.hideSoftInputFromWindow(windowToken, 0)
+            hideSoftKeyboard()
             blink.cancel()
         }
     }
@@ -333,7 +336,7 @@ class VerificationCodeView @JvmOverloads constructor(
         requestFocusFromTouch()
 
         if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-            imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+            showSoftKeyboard()
         }
         return true
     }
@@ -359,21 +362,19 @@ class VerificationCodeView @JvmOverloads constructor(
             KeyEvent.KEYCODE_DEL -> {
                 if (sb.isNotEmpty()) {
                     sb.deleteCharAt(sb.length - 1)
-                    listener?.onChanged(this, sb.toString(), false)
+                    listener?.onChanged(this, sb.toString(), isFullFilled)
                     invalidate()
                 }
             }
             in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
                 if (sb.length < capacity) {
                     sb.append(keyCode - KeyEvent.KEYCODE_0)
-                    listener?.onChanged(this, sb.toString(), sb.length == capacity)
+                    listener?.onChanged(this, sb.toString(), isFullFilled)
                     invalidate()
                 }
             }
             KeyEvent.KEYCODE_ENTER -> {
-                val imm =
-                    context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-                imm.hideSoftInputFromWindow(windowToken, 0)
+                hideSoftKeyboard()
             }
             else -> {
             }
@@ -445,6 +446,16 @@ class VerificationCodeView @JvmOverloads constructor(
             cancelled = false
             makeBlink()
         }
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun showSoftKeyboard() {
+        imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
+    }
+
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun hideSoftKeyboard() {
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 }
