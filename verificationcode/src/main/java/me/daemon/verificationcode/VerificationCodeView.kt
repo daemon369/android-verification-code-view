@@ -1,6 +1,7 @@
 package me.daemon.verificationcode
 
 import android.annotation.SuppressLint
+import android.content.ClipboardManager
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
@@ -11,9 +12,8 @@ import android.os.Parcelable
 import android.os.SystemClock
 import android.text.InputType
 import android.util.AttributeSet
-import android.view.KeyEvent
-import android.view.MotionEvent
-import android.view.View
+import android.util.Log
+import android.view.*
 import android.view.inputmethod.BaseInputConnection
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputConnection
@@ -149,6 +149,11 @@ class VerificationCodeView @JvmOverloads constructor(
     private val imm by lazy {
         context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     }
+    private val cm by lazy {
+        context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+    }
+
+    private var _onClickListener: OnClickListener? = null
 
     init {
         @SuppressLint("CustomViewStyleable")
@@ -189,6 +194,8 @@ class VerificationCodeView @JvmOverloads constructor(
 
         isFocusable = true
         isFocusableInTouchMode = true
+        isClickable = true
+        isLongClickable = true
 
         textPaint.apply {
             isAntiAlias = true
@@ -205,6 +212,17 @@ class VerificationCodeView @JvmOverloads constructor(
         auxiliaryPaint.apply {
             isAntiAlias = true
         }
+
+        super.setOnClickListener {
+            requestFocus()
+            requestFocusFromTouch()
+            showSoftKeyboard()
+            _onClickListener?.onClick(this)
+        }
+    }
+
+    override fun setOnClickListener(l: OnClickListener?) {
+        _onClickListener = l
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -329,17 +347,17 @@ class VerificationCodeView @JvmOverloads constructor(
         }
     }
 
-    override fun onTouchEvent(event: MotionEvent?): Boolean {
-        event ?: return super.onTouchEvent(event)
-
-        requestFocus()
-        requestFocusFromTouch()
-
-        if (event.actionMasked == MotionEvent.ACTION_DOWN) {
-            showSoftKeyboard()
-        }
-        return true
-    }
+//    override fun onTouchEvent(event: MotionEvent?): Boolean {
+//        event ?: return super.onTouchEvent(event)
+//
+//        requestFocus()
+//        requestFocusFromTouch()
+//
+//        if (event.actionMasked == MotionEvent.ACTION_DOWN) {
+//            showSoftKeyboard()
+//        }
+//        return false
+//    }
 
     override fun onCheckIsTextEditor(): Boolean {
         return true
@@ -380,6 +398,31 @@ class VerificationCodeView @JvmOverloads constructor(
             }
         }
         return super.onKeyDown(keyCode, event)
+    }
+
+    private val onMenuItemClickListener = MenuItem.OnMenuItemClickListener { menuItem ->
+        if (menuItem == null || menuItem.itemId != android.R.id.paste) return@OnMenuItemClickListener false
+        val clip = cm.primaryClip ?: return@OnMenuItemClickListener true
+        if (clip.itemCount == 0) return@OnMenuItemClickListener true
+        val item = clip.getItemAt(0)
+        val c = item.coerceToText(context) ?: return@OnMenuItemClickListener true
+        sb.clear()
+        for (i in c) {
+            if (i in '0'..'9') sb.append(i)
+            if (isFullFilled) break
+        }
+        listener?.onChanged(this, sb.toString(), isFullFilled)
+        invalidate()
+
+        return@OnMenuItemClickListener true
+    }
+
+
+    override fun onCreateContextMenu(menu: ContextMenu) {
+        super.onCreateContextMenu(menu)
+        menu.add(Menu.NONE, android.R.id.paste, 0, android.R.string.paste)
+            .setAlphabeticShortcut('v')
+            .setOnMenuItemClickListener(onMenuItemClickListener)
     }
 
     override fun onSaveInstanceState(): Parcelable? {
