@@ -12,7 +12,6 @@ import android.os.Parcelable
 import android.os.SystemClock
 import android.text.InputType
 import android.util.AttributeSet
-import android.util.Log
 import android.view.*
 import android.view.inputmethod.BaseInputConnection
 import android.view.inputmethod.EditorInfo
@@ -375,7 +374,8 @@ class VerificationCodeView @JvmOverloads constructor(
         return fic
     }
 
-    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+    override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        if (doKeyDown(keyCode, event)) return true
         when (keyCode) {
             KeyEvent.KEYCODE_DEL -> {
                 if (sb.isNotEmpty()) {
@@ -400,20 +400,24 @@ class VerificationCodeView @JvmOverloads constructor(
         return super.onKeyDown(keyCode, event)
     }
 
+    override fun onKeyMultiple(keyCode: Int, repeatCount: Int, event: KeyEvent): Boolean {
+        if (doKeyDown(keyCode, event)) return true
+        return super.onKeyMultiple(keyCode, repeatCount, event)
+    }
+
+    override fun onKeyShortcut(keyCode: Int, event: KeyEvent): Boolean {
+        if (event.hasModifiers(KeyEvent.META_CTRL_ON)) {
+            if (keyCode == KeyEvent.KEYCODE_V) {
+                paste()
+                return true
+            }
+        }
+        return super.onKeyShortcut(keyCode, event)
+    }
+
     private val onMenuItemClickListener = MenuItem.OnMenuItemClickListener { menuItem ->
         if (menuItem == null || menuItem.itemId != android.R.id.paste) return@OnMenuItemClickListener false
-        val clip = cm.primaryClip ?: return@OnMenuItemClickListener true
-        if (clip.itemCount == 0) return@OnMenuItemClickListener true
-        val item = clip.getItemAt(0)
-        val c = item.coerceToText(context) ?: return@OnMenuItemClickListener true
-        sb.clear()
-        for (i in c) {
-            if (i in '0'..'9') sb.append(i)
-            if (isFullFilled) break
-        }
-        listener?.onChanged(this, sb.toString(), isFullFilled)
-        invalidate()
-
+        paste()
         return@OnMenuItemClickListener true
     }
 
@@ -499,6 +503,46 @@ class VerificationCodeView @JvmOverloads constructor(
     @Suppress("NOTHING_TO_INLINE")
     private inline fun hideSoftKeyboard() {
         imm.hideSoftInputFromWindow(windowToken, 0)
+    }
+
+    private fun doKeyDown(keyCode: Int, event: KeyEvent): Boolean {
+        when (keyCode) {
+            KeyEvent.KEYCODE_UNKNOWN -> {
+                if (event.action == KeyEvent.ACTION_MULTIPLE) {
+                    val c = event.characters
+                    if (!c.isNullOrEmpty()) {
+                        paste()
+                    }
+                    return true
+                }
+            }
+            KeyEvent.KEYCODE_PASTE -> {
+                if (event.hasNoModifiers()) {
+                    paste()
+                    return true
+                }
+            }
+        }
+
+        return false
+    }
+
+    private fun paste() {
+        val clip = cm.primaryClip ?: return
+        if (clip.itemCount == 0) return
+        val item = clip.getItemAt(0)
+        val c = item.coerceToText(context) ?: return
+        paste(c)
+    }
+
+    private fun paste(c: CharSequence) {
+        sb.clear()
+        for (i in c) {
+            if (i in '0'..'9') sb.append(i)
+            if (isFullFilled) break
+        }
+        listener?.onChanged(this, sb.toString(), isFullFilled)
+        invalidate()
     }
 
 }
