@@ -69,17 +69,11 @@ class MainActivity : AppCompatActivity() {
         vc.gridBackground = ColorDrawable(Color.YELLOW)
         vc.textSize = dp2px(30f)
         vc.textColor = Color.CYAN
-        vc.listener = object : VerificationCodeView.Listener {
-            override fun onChanged(
-                view: VerificationCodeView,
-                content: String,
-                isFullFilled: Boolean
-            ) {
-                i(
-                    MainActivity::class.java.name,
-                    "on verification code view changed: $view, $content, $isFullFilled"
-                )
-            }
+        vc.listener = VerificationCodeView.Listener { view, content, isFullFilled ->
+            i(
+                MainActivity::class.java.name,
+                "on verification code view changed: $view, $content, $isFullFilled"
+            )
         }
     }
 }

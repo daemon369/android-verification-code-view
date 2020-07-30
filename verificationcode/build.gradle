@@ -52,7 +52,7 @@ ext {
     pub = [
             group   : 'me.daemon',
             artifact: 'verificationcodeview',
-            version : '0.1.0'
+            version : '0.1.1'
     ]
 
     bintrayRepo = 'maven'
