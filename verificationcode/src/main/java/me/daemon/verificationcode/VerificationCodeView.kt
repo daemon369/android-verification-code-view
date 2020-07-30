@@ -452,6 +452,16 @@ class VerificationCodeView @JvmOverloads constructor(
 
         fun onChanged(view: VerificationCodeView, content: String, isFullFilled: Boolean)
 
+        companion object {
+            inline operator fun invoke(crossinline l: (view: VerificationCodeView, content: String, isFullFilled: Boolean) -> Unit) =
+                object : Listener {
+                    override fun onChanged(
+                        view: VerificationCodeView,
+                        content: String,
+                        isFullFilled: Boolean
+                    ) = l(view, content, isFullFilled)
+                }
+        }
     }
 
     private fun shouldBlink() = cursorEnabled && cursorBlink
