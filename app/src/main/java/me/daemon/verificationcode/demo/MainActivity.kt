@@ -47,6 +47,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        vc3.listener = VerificationCodeView.Listener { view, content, isFullFilled ->
+            i(
+                MainActivity::class.java.name,
+                "on verification code view changed 3: $view, $content, $isFullFilled"
+            )
+        }
         vc3.postDelayed({ vc3.requestFocus() }, 3000)
         root.setOnClickListener { vc3.clearFocus() }
     }
