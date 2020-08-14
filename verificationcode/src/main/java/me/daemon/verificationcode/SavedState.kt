@@ -19,7 +19,9 @@ class SavedState : View.BaseSavedState {
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    constructor(source: Parcel?, loader: ClassLoader?) : super(source, loader)
+    constructor(source: Parcel?, loader: ClassLoader?) : super(source, loader) {
+        str = source?.readString() ?: ""
+    }
 
     constructor(superState: Parcelable?) : super(superState)
 
