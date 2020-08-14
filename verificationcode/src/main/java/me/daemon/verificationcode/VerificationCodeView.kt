@@ -47,6 +47,7 @@ class VerificationCodeView @JvmOverloads constructor(
 
     var capacity = 4
         set(value) {
+            if (value <= 0) throw IllegalArgumentException("capacity must be positive")
             if (field == value) return
             field = value
             postInvalidate()
@@ -66,8 +67,9 @@ class VerificationCodeView @JvmOverloads constructor(
             postInvalidate()
         }
 
-    var textSize = context.sp2px(14f)
+    var textSize = sp2px(14f)
         set(value) {
+            if (textSize <= 0) throw IllegalArgumentException("textSize must be positive")
             if (field == value) return
             field = value
             textPaint.textSize = field
@@ -91,6 +93,7 @@ class VerificationCodeView @JvmOverloads constructor(
 
     var cursorWidth = 0
         set(value) {
+            if (cursorWidth < 0) throw IllegalArgumentException("cursorWidth mustn't be negative")
             if (field == value) return
             field = value
             postInvalidate()
@@ -98,6 +101,7 @@ class VerificationCodeView @JvmOverloads constructor(
 
     var cursorHeight = 0
         set(value) {
+            if (cursorHeight < 0) throw IllegalArgumentException("cursorHeight mustn't be negative")
             if (field == value) return
             field = value
             postInvalidate()
@@ -125,6 +129,7 @@ class VerificationCodeView @JvmOverloads constructor(
      */
     var cursorBlinkInterval = BLINK
         set(value) {
+            if (cursorBlinkInterval <= 0) throw IllegalArgumentException("cursorBlinkInterval must be positive")
             if (field == value) return
             field = value
 
@@ -380,14 +385,14 @@ class VerificationCodeView @JvmOverloads constructor(
             KeyEvent.KEYCODE_DEL -> {
                 if (sb.isNotEmpty()) {
                     sb.deleteCharAt(sb.length - 1)
-                    listener?.onChanged(this, sb.toString(), isFullFilled)
+                    onChanged()
                     invalidate()
                 }
             }
             in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
                 if (sb.length < capacity) {
                     sb.append(keyCode - KeyEvent.KEYCODE_0)
-                    listener?.onChanged(this, sb.toString(), isFullFilled)
+                    onChanged()
                     invalidate()
                 }
             }
@@ -518,6 +523,7 @@ class VerificationCodeView @JvmOverloads constructor(
     private fun doKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         when (keyCode) {
             KeyEvent.KEYCODE_UNKNOWN -> {
+                @Suppress("DEPRECATION")
                 if (event.action == KeyEvent.ACTION_MULTIPLE) {
                     val c = event.characters
                     if (!c.isNullOrEmpty()) {
@@ -548,11 +554,15 @@ class VerificationCodeView @JvmOverloads constructor(
     private fun paste(c: CharSequence) {
         sb.clear()
         for (i in c) {
-            if (i in '0'..'9') sb.append(i)
             if (isFullFilled) break
+            if (i in '0'..'9') sb.append(i)
         }
-        listener?.onChanged(this, sb.toString(), isFullFilled)
+        onChanged()
         invalidate()
     }
 
+    @Suppress("NOTHING_TO_INLINE")
+    private inline fun onChanged() {
+        listener?.onChanged(this, sb.toString(), isFullFilled)
+    }
 }
