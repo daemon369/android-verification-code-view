@@ -363,9 +363,7 @@ class VerificationCodeView @JvmOverloads constructor(
 //        return false
 //    }
 
-    override fun onCheckIsTextEditor(): Boolean {
-        return true
-    }
+    override fun onCheckIsTextEditor() = true
 
     override fun onCreateInputConnection(outAttrs: EditorInfo?): InputConnection {
         outAttrs ?: return super.onCreateInputConnection(outAttrs)
@@ -382,25 +380,18 @@ class VerificationCodeView @JvmOverloads constructor(
     override fun onKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         if (doKeyDown(keyCode, event)) return true
         when (keyCode) {
-            KeyEvent.KEYCODE_DEL -> {
-                if (sb.isNotEmpty()) {
-                    sb.deleteCharAt(sb.length - 1)
-                    onChanged()
-                    invalidate()
-                }
+            KeyEvent.KEYCODE_DEL -> if (sb.isNotEmpty()) {
+                sb.deleteCharAt(sb.length - 1)
+                onChanged()
+                invalidate()
             }
-            in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> {
-                if (sb.length < capacity) {
-                    sb.append(keyCode - KeyEvent.KEYCODE_0)
-                    onChanged()
-                    invalidate()
-                }
+            in KeyEvent.KEYCODE_0..KeyEvent.KEYCODE_9 -> if (sb.length < capacity) {
+                sb.append(keyCode - KeyEvent.KEYCODE_0)
+                onChanged()
+                invalidate()
             }
-            KeyEvent.KEYCODE_ENTER -> {
-                hideSoftKeyboard()
-            }
-            else -> {
-            }
+            KeyEvent.KEYCODE_ENTER -> hideSoftKeyboard()
+            else -> Unit
         }
         return super.onKeyDown(keyCode, event)
     }
@@ -485,9 +476,7 @@ class VerificationCodeView @JvmOverloads constructor(
         }
 
         override fun run() {
-            if (cancelled) {
-                return
-            }
+            if (cancelled) return
 
             this@VerificationCodeView.removeCallbacks(this)
             if (shouldBlink()) {
@@ -511,14 +500,11 @@ class VerificationCodeView @JvmOverloads constructor(
     }
 
     @Suppress("NOTHING_TO_INLINE")
-    private inline fun showSoftKeyboard() {
+    private inline fun showSoftKeyboard() =
         imm.showSoftInput(this, InputMethodManager.SHOW_IMPLICIT)
-    }
 
     @Suppress("NOTHING_TO_INLINE")
-    private inline fun hideSoftKeyboard() {
-        imm.hideSoftInputFromWindow(windowToken, 0)
-    }
+    private inline fun hideSoftKeyboard() = imm.hideSoftInputFromWindow(windowToken, 0)
 
     private fun doKeyDown(keyCode: Int, event: KeyEvent): Boolean {
         when (keyCode) {
@@ -562,7 +548,5 @@ class VerificationCodeView @JvmOverloads constructor(
     }
 
     @Suppress("NOTHING_TO_INLINE")
-    private inline fun onChanged() {
-        listener?.onChanged(this, sb.toString(), isFullFilled)
-    }
+    private inline fun onChanged() = listener?.onChanged(this, sb.toString(), isFullFilled)
 }
