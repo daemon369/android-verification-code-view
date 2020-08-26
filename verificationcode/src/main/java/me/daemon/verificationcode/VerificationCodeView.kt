@@ -238,6 +238,11 @@ class VerificationCodeView @JvmOverloads constructor(
 
     override fun hasOnClickListeners(): Boolean = _onClickListener != null
 
+    override fun performClick(): Boolean {
+        super.performClick()
+        return hasOnClickListeners()
+    }
+
     override fun callOnClick(): Boolean {
         super.callOnClick()
         return hasOnClickListeners()
