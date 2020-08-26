@@ -10,7 +10,7 @@ import androidx.annotation.RequiresApi
  * @author daemon
  * @since 2019-06-27 15:55
  */
-class SavedState : View.BaseSavedState {
+internal class SavedState : View.BaseSavedState {
 
     var str = ""
         private set
