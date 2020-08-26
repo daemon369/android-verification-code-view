@@ -42,6 +42,7 @@ class VerificationCodeView @JvmOverloads constructor(
 
     private val blink by lazy { Blink() }
 
+    @Suppress("unused")
     val verificationCode: String
         get() = sb.toString()
 
@@ -84,6 +85,7 @@ class VerificationCodeView @JvmOverloads constructor(
             postInvalidate()
         }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     var cursorEnabled = false
         set(value) {
             if (field == value) return
@@ -91,6 +93,7 @@ class VerificationCodeView @JvmOverloads constructor(
             postInvalidate()
         }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     var cursorWidth = 0
         set(value) {
             if (cursorWidth < 0) throw IllegalArgumentException("cursorWidth mustn't be negative")
@@ -99,6 +102,7 @@ class VerificationCodeView @JvmOverloads constructor(
             postInvalidate()
         }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     var cursorHeight = 0
         set(value) {
             if (cursorHeight < 0) throw IllegalArgumentException("cursorHeight mustn't be negative")
@@ -107,6 +111,7 @@ class VerificationCodeView @JvmOverloads constructor(
             postInvalidate()
         }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     var cursorColor = Color.BLACK
         set(value) {
             if (field == value) return
@@ -114,6 +119,7 @@ class VerificationCodeView @JvmOverloads constructor(
             postInvalidate()
         }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     var cursorBlink = true
         set(value) {
             if (field == value) return
@@ -139,6 +145,7 @@ class VerificationCodeView @JvmOverloads constructor(
             postInvalidate()
         }
 
+    @Suppress("MemberVisibilityCanBePrivate")
     val isFullFilled
         get() = sb.length == capacity
 
@@ -227,6 +234,13 @@ class VerificationCodeView @JvmOverloads constructor(
 
     override fun setOnClickListener(l: OnClickListener?) {
         _onClickListener = l
+    }
+
+    override fun hasOnClickListeners(): Boolean = _onClickListener != null
+
+    override fun callOnClick(): Boolean {
+        super.callOnClick()
+        return hasOnClickListeners()
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
