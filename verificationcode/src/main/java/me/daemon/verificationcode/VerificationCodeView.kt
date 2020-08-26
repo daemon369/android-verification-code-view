@@ -444,13 +444,8 @@ class VerificationCodeView @JvmOverloads constructor(
             .setOnMenuItemClickListener(onMenuItemClickListener)
     }
 
-    override fun onSaveInstanceState(): Parcelable? {
-        val savedState = SavedState(super.onSaveInstanceState())
-
-        savedState.str = sb.toString()
-
-        return savedState
-    }
+    override fun onSaveInstanceState(): Parcelable? =
+        SavedState(super.onSaveInstanceState()).str(sb.toString())
 
     override fun onRestoreInstanceState(state: Parcelable?) {
         if (state is SavedState) {

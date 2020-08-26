@@ -13,6 +13,7 @@ import androidx.annotation.RequiresApi
 class SavedState : View.BaseSavedState {
 
     var str = ""
+        private set
 
     constructor(source: Parcel?) : super(source) {
         str = source?.readString() ?: ""
@@ -25,23 +26,18 @@ class SavedState : View.BaseSavedState {
 
     constructor(superState: Parcelable?) : super(superState)
 
+    fun str(str: String) = apply { this.str = str }
+
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         super.writeToParcel(parcel, flags)
         parcel.writeString(str)
     }
 
-    override fun describeContents(): Int {
-        return 0
-    }
+    override fun describeContents(): Int = 0
 
     companion object CREATOR : Parcelable.Creator<SavedState> {
-        override fun createFromParcel(parcel: Parcel): SavedState {
-            return SavedState(parcel)
-        }
-
-        override fun newArray(size: Int): Array<SavedState?> {
-            return arrayOfNulls(size)
-        }
+        override fun createFromParcel(parcel: Parcel): SavedState = SavedState(parcel)
+        override fun newArray(size: Int): Array<SavedState?> = arrayOfNulls(size)
     }
 
 }
