@@ -2,6 +2,7 @@
 
 package me.daemon.verificationcode.lint
 
+import com.android.SdkConstants.AUTO_URI
 import com.android.resources.ResourceFolderType
 import com.android.tools.lint.detector.api.*
 import com.intellij.psi.JavaElementVisitor
@@ -16,13 +17,10 @@ class VerificationCodeViewUsageDetector : Detector(), Detector.XmlScanner, Detec
         return folderType == ResourceFolderType.LAYOUT
     }
 
-    override fun getApplicableElements(): Collection<String>? {
-        return listOf("me.daemon.verificationcode.VerificationCodeView")
-    }
+    override fun getApplicableElements(): Collection<String>? = listOf(CLASS_NAME)
 
     override fun visitElement(context: XmlContext, element: Element) {
-        println("visitElement: $context, $element")
-        val node = element.getAttributeNodeNS(APP_NS, "daemon_vc_capacity") ?: return
+        val node = element.getAttributeNodeNS(AUTO_URI, "daemon_vc_capacity") ?: return
         val capacity = node.value.toIntOrNull()
         if (capacity == null || (capacity in 1..100).not()) context.report(
             issue = ISSUE_CAPACITY,
@@ -38,7 +36,7 @@ class VerificationCodeViewUsageDetector : Detector(), Detector.XmlScanner, Detec
     override fun visitMethodCall(context: JavaContext, node: UCallExpression, method: PsiMethod) {
         println("visitMethodCall: $context, $node, $method")
         val evaluator = context.evaluator
-        if (!evaluator.isMemberInClass(method, "me.daemon.verificationcode.VerificationCodeView")) return
+        if (!evaluator.isMemberInClass(method, CLASS_NAME)) return
         throw IllegalArgumentException("visitMethodCall")
     }
 
@@ -53,7 +51,7 @@ class VerificationCodeViewUsageDetector : Detector(), Detector.XmlScanner, Detec
 
     companion object {
 
-        const val APP_NS = "http://schemas.android.com/apk/res-auto"
+        const val CLASS_NAME = "me.daemon.verificationcode.VerificationCodeView"
 
         private const val CAPACITY_MESSAGE = "Capacity should be between 1 to 100"
 
@@ -69,7 +67,7 @@ class VerificationCodeViewUsageDetector : Detector(), Detector.XmlScanner, Detec
             category = Category.USABILITY,
             priority = 1,
             severity = Severity.WARNING,
-            implementation = RESOURCE_FILE_IMPL // directing to the implementation of this issue, i.e. the detector class, used when registering this issue
+            implementation = RESOURCE_FILE_IMPL
         )
 
         val issues = listOf(
