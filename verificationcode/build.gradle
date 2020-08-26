@@ -46,6 +46,8 @@ dependencies {
     androidTestImplementation deps.x.espresso
 
     api 'me.daemon:androidviewcommon:0.0.9'
+
+    lintPublish project(':lint')
 }
 
 ext {

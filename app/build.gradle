@@ -34,6 +34,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation platform(deps.kotlinbom)
     implementation deps.kotlin
     implementation deps.x.appcompat
     testImplementation deps.junit
@@ -43,5 +44,7 @@ dependencies {
 
     implementation project(':verificationcode')
 //    implementation 'me.daemon:verificationcodeview:0.0.3'
+
+    lintChecks project(":lint")
 
 }

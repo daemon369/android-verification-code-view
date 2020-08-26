@@ -1,0 +1,25 @@
+apply plugin: 'java-library'
+apply plugin: 'kotlin'
+
+sourceCompatibility = "1.8"
+targetCompatibility = "1.8"
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    compileOnly platform(deps.kotlinbom)
+    compileOnly deps.kotlin
+
+    def ver = '27.0.1'
+    compileOnly "com.android.tools.lint:lint-api:$ver"
+    compileOnly "com.android.tools.lint:lint-checks:$ver"
+
+    testImplementation "com.android.tools.lint:lint:$ver"
+    testImplementation "com.android.tools.lint:lint-tests:$ver"
+}
+
+jar {
+    manifest {
+        attributes("Lint-Registry-v2": "me.daemon.verificationcode.lint.IssueRegistry")
+    }
+}
