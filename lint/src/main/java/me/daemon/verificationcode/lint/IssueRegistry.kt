@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package me.daemon.verificationcode.lint
 
 import com.android.tools.lint.client.api.IssueRegistry
