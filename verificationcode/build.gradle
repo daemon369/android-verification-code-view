@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.library'
     id 'kotlin-android'
-    id 'com.jfrog.bintray' version '1.8.5'
 }
 
 android {
@@ -52,38 +51,4 @@ dependencies {
     api 'io.github.daemon369:android-view-common:0.1.0'
 
     lintPublish project(':lint')
-}
-
-ext {
-    pub = [
-            group   : 'me.daemon',
-            artifact: 'verificationcodeview',
-            version : '0.1.2'
-    ]
-
-    bintrayRepo = 'maven'
-    bintrayName = 'verificationcodeview'
-
-    bintrayOverride = false
-
-    libraryName = 'VerificationCodeView'
-
-    libraryDescription = 'Verification code input view for android'
-
-    siteUrl = 'https://github.com/daemon369/VerificationCodeView'
-    gitUrl = 'https://github.com/daemon369/VerificationCodeView.git'
-
-    developerId = 'daemon369'
-    developerName = 'daemon369'
-    developerEmail = 'daemon336699@gmail.com'
-
-    licenseName = 'The Apache Software License, Version 2.0'
-    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-    allLicenses = ["Apache-2.0"]
-}
-
-apply from: 'https://gist.githubusercontent.com/daemon369/68181149e12655300101ea9565679403/raw/b4770d9fc7df05224f57d2521366b7c78771be9f/AndroidPublishToMavenAndBintray'
-
-bintray {
-    override = bintrayOverride
 }
