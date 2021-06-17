@@ -1,0 +1,85 @@
+import me.daemon.plugin.Configuration
+
+apply plugin: 'maven-publish'
+apply plugin: 'signing'
+
+task androidSourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    if (project.plugins.findPlugin("com.android.library")) {
+        from android.sourceSets.main.java.srcDirs
+        from android.sourceSets.main.kotlin.srcDirs
+    } else {
+        from sourceSets.main.java.srcDirs
+        from sourceSets.main.kotlin.srcDirs
+    }
+}
+
+artifacts {
+    archives androidSourcesJar
+}
+
+group = Configuration.groupId
+version = Configuration.version
+
+afterEvaluate {
+    publishing {
+        repositories {
+            maven {
+                url = "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/"
+
+                credentials {
+                    username = ossrhUsername
+                    password = ossrhPassword
+                }
+            }
+        }
+
+        publications {
+            release(MavenPublication) {
+                groupId Configuration.groupId
+                artifactId Configuration.artifactId
+                version Configuration.version
+                if (project.plugins.findPlugin("com.android.library")) {
+                    from components.release
+                } else {
+                    artifact("$buildDir/libs/${project.getName()}-${version}.jar")
+                }
+
+                artifact androidSourcesJar
+
+                pom {
+                    name = Configuration.pom.name
+                    description = Configuration.pom.description
+                    url = Configuration.pom.url
+                    licenses {
+                        license {
+                            name = 'The Apache Software License, Version 2.0'
+                            url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                        }
+                    }
+                    developers {
+                        developer {
+                            id = 'daemon'
+                            name = 'Daemon'
+                            email = 'daemon336699@gmail.com'
+                        }
+                    }
+                    scm {
+                        connection = Configuration.pom.scm.connection
+                        developerConnection = Configuration.pom.scm.developerConnection
+                        url = Configuration.pom.scm.url
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+ext["signing.keyId"] = rootProject.ext["signing.keyId"]
+ext["signing.password"] = rootProject.ext["signing.password"]
+ext["signing.secretKeyRingFile"] = rootProject.ext["signing.secretKeyRingFile"]
+
+signing {
+    sign publishing.publications
+}

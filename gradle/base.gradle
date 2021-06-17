@@ -1,0 +1,38 @@
+/**
+ * base gradle script for library & application
+ */
+apply plugin: 'kotlin-android'
+
+
+import me.daemon.plugin.Configuration
+import me.daemon.plugin.Libraries
+
+android {
+    compileSdkVersion Configuration.compileSdkVersion
+    buildToolsVersion Configuration.buildToolsVersion
+
+    defaultConfig {
+        minSdkVersion Configuration.minSdkVersion
+        targetSdkVersion Configuration.targetSdkVersion
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: "libs", include: ["*.jar"])
+    implementation platform(Libraries.K.bom)
+    implementation Libraries.K.std
+
+    testImplementation Libraries.T.junit
+    androidTestImplementation Libraries.T.xJunit
+    androidTestImplementation Libraries.T.espresso
+}
