@@ -1,36 +1,8 @@
-plugins {
-    id 'com.android.library'
-    id 'kotlin-android'
-}
+import me.daemon.plugin.Libraries
+
+apply from: "$rootDir/gradle/library_base.gradle"
 
 android {
-    compileSdkVersion compile_sdk_version
-
-    defaultConfig {
-        minSdkVersion min_sdk_version
-        targetSdkVersion target_sdk_version
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-        }
-    }
-
-    compileOptions {
-        kotlinOptions.freeCompilerArgs += ['-module-name', "me.daemon.verficationcode"]
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         buildConfig = false
     }
@@ -41,12 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation deps.kotlin
-    implementation deps.x.appcompat
-    testImplementation deps.junit
-    androidTestImplementation deps.x.testrunner
-    androidTestImplementation deps.x.espresso
+    implementation Libraries.X.appCompat
 
     api 'io.github.daemon369:android-view-common:0.1.0'
 

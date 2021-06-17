@@ -1,3 +1,5 @@
+import me.daemon.plugin.Libraries
+
 apply plugin: 'java-library'
 apply plugin: 'kotlin'
 
@@ -7,8 +9,8 @@ targetCompatibility = "1.8"
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compileOnly platform(deps.kotlinbom)
-    compileOnly deps.kotlin
+    compileOnly platform(Libraries.K.bom)
+    compileOnly Libraries.K.std
 
     def ver = '27.0.1'
     compileOnly "com.android.tools.lint:lint-api:$ver"
