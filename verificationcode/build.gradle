@@ -37,6 +37,10 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation deps.kotlin
@@ -45,7 +49,7 @@ dependencies {
     androidTestImplementation deps.x.testrunner
     androidTestImplementation deps.x.espresso
 
-    api 'me.daemon:androidviewcommon:0.0.9'
+    api 'io.github.daemon369:android-view-common:0.1.0'
 
     lintPublish project(':lint')
 }
