@@ -8,10 +8,6 @@ android {
     }
 }
 
-repositories {
-    maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-}
-
 dependencies {
     implementation Libraries.X.appCompat
 
@@ -19,3 +15,5 @@ dependencies {
 
     lintPublish project(':lint')
 }
+
+apply from: "$rootDir/gradle/maven-publish.gradle"
