@@ -7,7 +7,7 @@ object Configuration {
     const val buildToolsVersion = "30.0.3"
     const val groupId = "io.github.daemon369"
     const val artifactId = "verification-code-view"
-    const val version = "0.1.2"
+    const val version = "0.1.3"
 
     @Suppress("ClassName")
     object pom {
