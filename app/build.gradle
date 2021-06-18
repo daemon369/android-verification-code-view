@@ -2,7 +2,6 @@ import me.daemon.plugin.Libraries
 
 apply plugin: 'com.android.application'
 apply from: "$rootDir/gradle/base.gradle"
-apply plugin: 'kotlin-android-extensions'
 
 android {
 

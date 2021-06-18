@@ -4,8 +4,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log.i
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
 import me.daemon.verificationcode.VerificationCodeView
 import me.daemon.view.common.dp2px
 
@@ -14,6 +14,11 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val vc = findViewById<VerificationCodeView>(R.id.vc)
+        val vc2 = findViewById<VerificationCodeView>(R.id.vc2)
+        val vc3 = findViewById<VerificationCodeView>(R.id.vc3)
+        val root = findViewById<ViewGroup>(R.id.root)
 
         vc.capacity = 6
         vc.gridDividerSize = 10
