@@ -1,20 +1,17 @@
 # VerificationCodeView
 
- [ ![Download](https://api.bintray.com/packages/daemon336699/maven/verificationcodeview/images/download.svg) ](https://bintray.com/daemon336699/maven/verificationcodeview/_latestVersion)
-
 ----
 
-# 使用方法
+## 使用方法
 
-## 1. 项目依赖
+### 1. 项目依赖
 
 项目根目录下`build.gradle`中加入：
 
 ```
 allprojects {
     repositories {
-        ...
-        jcenter()
+        mavenCentral()
     }
 }
 ```
@@ -23,11 +20,13 @@ allprojects {
 
 ```
 dependencies {
-    implementation 'me.daemon:verificationcodeview:x.y.z'
+    implementation 'io.github.daemon369:verification-code-view:x.y.z'
 }
 ```
 
-将其中的`x`、`y`、`z`替换为真实版本号：[ ![Download](https://api.bintray.com/packages/daemon336699/maven/verificationcodeview/images/download.svg) ](https://bintray.com/daemon336699/maven/verificationcodeview/_latestVersion)
+将其中的`x`、`y`、`z`替换为真实版本号
+
+可以在中央仓库<https://mvnrepository.com/artifact/io.github.daemon369/verification-code-view>获取最新版本号
 
 ## 2. 使用
 
@@ -79,7 +78,7 @@ class MainActivity : AppCompatActivity() {
 }
 ```
 
-# 属性
+## 属性
 
 |  XML属性                        | 版本    | 说明                                                  |
 | ------------------------------- | ------ | ---------------------------------------------------- |
